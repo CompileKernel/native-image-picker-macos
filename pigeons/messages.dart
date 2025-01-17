@@ -87,6 +87,7 @@ enum ImagePickerError {
   /// from the compressed `Data`.
   imageCompressionFailed,
 
+  // TODO(EchoEllet): Add support multi-video selection via pickVideos instead of only pickMedia
   /// The multi-video selection is not supported as it's not supported in
   /// the app-facing package (`pickVideos` is missing).
   /// The multi-video selection is supported when using `pickMedia` instead.
