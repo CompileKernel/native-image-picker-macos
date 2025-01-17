@@ -10,7 +10,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:native_image_picker_macos/src/messages.g.dart';
 
-
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
   @override
@@ -18,25 +17,25 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is ImagePickerError) {
+    } else if (value is ImagePickerError) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    }    else if (value is GeneralOptions) {
+    } else if (value is GeneralOptions) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is MaxSize) {
+    } else if (value is MaxSize) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    }    else if (value is ImageSelectionOptions) {
+    } else if (value is ImageSelectionOptions) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is MediaSelectionOptions) {
+    } else if (value is MediaSelectionOptions) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    }    else if (value is ImagePickerSuccessResult) {
+    } else if (value is ImagePickerSuccessResult) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    }    else if (value is ImagePickerErrorResult) {
+    } else if (value is ImagePickerErrorResult) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
@@ -47,20 +46,20 @@ class _PigeonCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 129: 
+      case 129:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : ImagePickerError.values[value];
-      case 130: 
+      case 130:
         return GeneralOptions.decode(readValue(buffer)!);
-      case 131: 
+      case 131:
         return MaxSize.decode(readValue(buffer)!);
-      case 132: 
+      case 132:
         return ImageSelectionOptions.decode(readValue(buffer)!);
-      case 133: 
+      case 133:
         return MediaSelectionOptions.decode(readValue(buffer)!);
-      case 134: 
+      case 134:
         return ImagePickerSuccessResult.decode(readValue(buffer)!);
-      case 135: 
+      case 135:
         return ImagePickerErrorResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -69,141 +68,192 @@ class _PigeonCodec extends StandardMessageCodec {
 }
 
 abstract class TestHostImagePickerApi {
-  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding => TestDefaultBinaryMessengerBinding.instance;
+  static TestDefaultBinaryMessengerBinding? get _testBinaryMessengerBinding =>
+      TestDefaultBinaryMessengerBinding.instance;
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   /// Returns whether [PHPickerViewController](https://developer.apple.com/documentation/photosui/phpickerviewcontroller)
   /// is supported on the current macOS version.
   bool supportsPHPicker();
 
-  Future<ImagePickerResult> pickImages(ImageSelectionOptions options, GeneralOptions generalOptions);
+  Future<ImagePickerResult> pickImages(
+      ImageSelectionOptions options, GeneralOptions generalOptions);
 
   Future<ImagePickerResult> pickVideos(GeneralOptions generalOptions);
 
-  Future<ImagePickerResult> pickMedia(MediaSelectionOptions options, GeneralOptions generalOptions);
+  Future<ImagePickerResult> pickMedia(
+      MediaSelectionOptions options, GeneralOptions generalOptions);
 
   /// Opens the [Photos for macOS](https://www.apple.com/in/macos/photos/) app.
   ///
   /// Returns whether the Photos app was successfully opened.
   bool openPhotosApp();
 
-  static void setUp(TestHostImagePickerApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
-    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  static void setUp(
+    TestHostImagePickerApi? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
+    messageChannelSuffix =
+        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.supportsPHPicker$messageChannelSuffix', pigeonChannelCodec,
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.supportsPHPicker$messageChannelSuffix',
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel,
+                (Object? message) async {
           try {
             final bool output = api.supportsPHPicker();
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickImages$messageChannelSuffix', pigeonChannelCodec,
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickImages$messageChannelSuffix',
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel,
+                (Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickImages was null.');
+              'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickImages was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final ImageSelectionOptions? arg_options = (args[0] as ImageSelectionOptions?);
+          final ImageSelectionOptions? arg_options =
+              (args[0] as ImageSelectionOptions?);
           assert(arg_options != null,
               'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickImages was null, expected non-null ImageSelectionOptions.');
-          final GeneralOptions? arg_generalOptions = (args[1] as GeneralOptions?);
+          final GeneralOptions? arg_generalOptions =
+              (args[1] as GeneralOptions?);
           assert(arg_generalOptions != null,
               'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickImages was null, expected non-null GeneralOptions.');
           try {
-            final ImagePickerResult output = await api.pickImages(arg_options!, arg_generalOptions!);
+            final ImagePickerResult output =
+                await api.pickImages(arg_options!, arg_generalOptions!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickVideos$messageChannelSuffix', pigeonChannelCodec,
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickVideos$messageChannelSuffix',
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel,
+                (Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickVideos was null.');
+              'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickVideos was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final GeneralOptions? arg_generalOptions = (args[0] as GeneralOptions?);
+          final GeneralOptions? arg_generalOptions =
+              (args[0] as GeneralOptions?);
           assert(arg_generalOptions != null,
               'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickVideos was null, expected non-null GeneralOptions.');
           try {
-            final ImagePickerResult output = await api.pickVideos(arg_generalOptions!);
+            final ImagePickerResult output =
+                await api.pickVideos(arg_generalOptions!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickMedia$messageChannelSuffix', pigeonChannelCodec,
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickMedia$messageChannelSuffix',
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel,
+                (Object? message) async {
           assert(message != null,
-          'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickMedia was null.');
+              'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickMedia was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final MediaSelectionOptions? arg_options = (args[0] as MediaSelectionOptions?);
+          final MediaSelectionOptions? arg_options =
+              (args[0] as MediaSelectionOptions?);
           assert(arg_options != null,
               'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickMedia was null, expected non-null MediaSelectionOptions.');
-          final GeneralOptions? arg_generalOptions = (args[1] as GeneralOptions?);
+          final GeneralOptions? arg_generalOptions =
+              (args[1] as GeneralOptions?);
           assert(arg_generalOptions != null,
               'Argument for dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.pickMedia was null, expected non-null GeneralOptions.');
           try {
-            final ImagePickerResult output = await api.pickMedia(arg_options!, arg_generalOptions!);
+            final ImagePickerResult output =
+                await api.pickMedia(arg_options!, arg_generalOptions!);
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.openPhotosApp$messageChannelSuffix', pigeonChannelCodec,
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.native_image_picker_macos.ImagePickerApi.openPhotosApp$messageChannelSuffix',
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel, null);
       } else {
-        _testBinaryMessengerBinding!.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(pigeonVar_channel, (Object? message) async {
+        _testBinaryMessengerBinding!.defaultBinaryMessenger
+            .setMockDecodedMessageHandler<Object?>(pigeonVar_channel,
+                (Object? message) async {
           try {
             final bool output = api.openPhotosApp();
             return <Object?>[output];
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
-          }          catch (e) {
-            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
           }
         });
       }
