@@ -1,0 +1,48 @@
+name: ✅ Swift Formatting Check
+
+# Separated from checks.yml since it takes longer to build swift-format from source.
+on:
+  push:
+    branches: [main]
+    paths:
+      - macos/native_image_picker_macos/**/*.swift
+      - .github/workflows/swift-format-check.yml
+  pull_request:
+    paths:
+      - macos/native_image_picker_macos/**/*.swift
+      - .github/workflows/swift-format-check.yml
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      SWIFT_FORMAT_VERSION: 600.0.0
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup Swift
+        uses: swift-actions/setup-swift@v2
+
+      - name: 📦 Install Swift Format
+        run: |
+          git clone --branch $SWIFT_FORMAT_VERSION --depth 1 https://github.com/swiftlang/swift-format.git
+          cd swift-format
+          swift build -c release
+          sudo mv .build/release/swift-format /usr/local/bin/
+          
+      - name: 🔍 Verify Swift Format installation
+        run: swift-format --version
+
+      - name: ℹ️ Print the default configuration
+        run: swift-format dump-configuration
+
+      - name: 🔎 Validate Swift Code Formatting
+        run: swift-format lint -r macos/native_image_picker_macos/Sources/native_image_picker_macos --strict
+
+        # SwiftLint: https://github.com/realm/SwiftLint
+    #   - name: 🎨 Verify Swift Code Style with SwiftLint
+    #     uses: norio-nomura/action-swiftlint@3.2.1

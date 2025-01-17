@@ -1,0 +1,33 @@
+name: native_image_picker_macos
+description: "A macOS platform implementation of image_picker using the native system picker instead of file_selector"
+version: 0.0.1
+repository: https://github.com/CompileKernel/native-image-picker-macos
+documentation: https://github.com/CompileKernel/native-image-picker-macos
+homepage: https://github.com/CompileKernel/native-image-picker-macos
+issue_tracker: https://github.com/CompileKernel/native-image-picker-macos/issues
+topics: [image-picker, files, file-selection]
+
+environment:
+  sdk: ^3.0.0
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker_platform_interface: ^2.8.0
+  meta: ^1.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  mockito: ^5.4.5
+  pigeon: ^22.7.2
+  build_runner: ^2.4.14
+
+flutter:
+  plugin:
+    platforms:
+      macos:
+        dartPluginClass: NativeImagePickerMacOS
+        pluginClass: NativeImagePickerPlugin
