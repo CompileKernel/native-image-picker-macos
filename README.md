@@ -18,7 +18,7 @@ which uses [`file_selector`](https://pub.dev/packages/file_selector).
 
 | Default picker | Native picker |
 |-------------------|-------------------|
-| <img src="https://github.com/CompileKernel/native-image-picker-macos/blob/main/readme_assets/image-picker-macos-file-selector.png?raw=true" alt="Default picker" height="400"/> | <img src="https://github.com/CompileKernel/native-image-picker-macos/blob/main/readme_assets/native-image-picker-macos-phpicker.png?raw=true" alt="macOS PHPicker" height="400"/> |
+| <img src="https://github.com/CompileKernel/native-image-picker-macos/blob/main/readme_assets/image-picker-macos-file-selector.png?raw=true" alt="Default picker" width="300"/> | <img src="https://github.com/CompileKernel/native-image-picker-macos/blob/main/readme_assets/native-image-picker-macos-phpicker.png?raw=true" alt="macOS PHPicker" width="300"/> |
 
 ## ✨ Features
 
