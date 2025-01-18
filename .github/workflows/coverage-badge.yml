@@ -1,0 +1,50 @@
+name: Create coverage badge
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install package dependencies
+        run: flutter pub get
+
+      - name: Run tests and collect coverage information
+        run: flutter test --coverage
+
+      - name: Install lcov (coverage tool)
+        run: sudo apt install -y lcov
+
+      - name: Extract coverage percentage
+        id: coverage-extractor
+        run: |
+          coverage=$(lcov --summary coverage/lcov.info | grep 'lines' | awk '{print $2}' | sed 's/%//' | sed 's/.0$//')
+          echo "COVERAGE=$coverage" >> $GITHUB_OUTPUT
+
+      - name: Output coverage percentage
+        run: |
+          echo "The code coverage percentage is ${{ steps.coverage-extractor.outputs.COVERAGE }}"
+
+      # For a detailed guide, refer to: https://bitspittle.dev/blog/2022/kover-badge
+      - name: Update dynamic badge gist
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: e115a2922ddd4f9f897b6e2c15d6c071 # https://gist.github.com/EchoEllet/e115a2922ddd4f9f897b6e2c15d6c071
+          filename: native-image-picker-macos-coverage-badge.json
+          label: 'Dart Coverage'
+          message: ${{ steps.coverage-extractor.outputs.COVERAGE }}%
+          valColorRange: ${{ steps.coverage-extractor.outputs.COVERAGE }}
+          minColorRange: 0
+          maxColorRange: 100

@@ -6,6 +6,11 @@ import 'package:pigeon/pigeon.dart';
     dartTestOut: 'test/test_api.g.dart',
     swiftOut:
         'macos/native_image_picker_macos/Sources/native_image_picker_macos/Messages.g.swift',
+    dartOptions: DartOptions(
+      copyrightHeader: <String>[
+        'coverage:ignore-file',
+      ],
+    ),
   ),
 )
 
