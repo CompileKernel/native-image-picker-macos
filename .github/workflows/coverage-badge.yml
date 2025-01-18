@@ -3,9 +3,6 @@ name: Create coverage badge
 on:
   push:
     branches: [main]
-  # TODO(EchoEllet): For testing only, remove
-  pull_request:
-    branches: [main]
 
 jobs:
   build:
