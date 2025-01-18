@@ -76,12 +76,15 @@ class _ButtonsState extends State<Buttons> {
           child: Column(
             spacing: 8,
             children: [
-              ElevatedButton.icon(
-                label: Text('Open Photos App'),
-                icon: Icon(Icons.photo_album),
-                // TODO: Not exactly a good practice.
-                onPressed: () => NativeImagePickerMacOS().openPhotosApp(),
-              ),
+              if (_useMacOSNativePicker)
+                ElevatedButton.icon(
+                  label: Text('Open Photos App'),
+                  icon: Icon(Icons.photo_album),
+                  // Using instanceOrThrow since we assume the current instance
+                  // is NativeImagePickerMacOS due to _useMacOSNativePicker check.
+                  onPressed: () =>
+                      NativeImagePickerMacOS.instanceOrThrow.openPhotosApp(),
+                ),
               TextFormField(
                 controller: _imageMaxWidthController,
                 decoration: InputDecoration(labelText: 'Image Max Width'),

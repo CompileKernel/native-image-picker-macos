@@ -86,6 +86,7 @@ final bool isRegistered = ImagePickerPlatform.instance is NativeImagePickerMacOS
 **To checks if the current macOS version supports this implementation**:
 
 ```dart
+<!-- TODO: Make this instance method? -->
 final bool isSupported = await NativeImagePickerMacOS().isSupported(); // Returns false on non-macOS platforms or if PHPicker is not supported on the current macOS version.
 ```
 
@@ -110,8 +111,7 @@ NativeImagePickerMacOS.registerWith();
 **To open the macOS photos app**:
 
 ```dart
-<!-- TODO: This approach needs more consideration, also update the example (which has related TODO) -->
-await NativeImagePickerMacOS().openPhotosApp();
+await NativeImagePickerMacOS.instanceOrNull?.openPhotosApp();
 
 // OR
 
@@ -123,6 +123,8 @@ if (imagePickerImplementation is NativeImagePickerMacOS) {
 
 > [!TIP]
 > You can use `NativeImagePickerMacOS.registerWith()` to register this implementation. However, this bypasses platform checks, which **may result in runtime errors** if the current platform is not macOS or if the macOS version is unsupported. Instead, use `registerWithIfSupported()` if uncertain.
+
+Refer to the [example main.dart](example/lib/main.dart) for a full usage example.
 
 ## 🌱 Contributing
 
@@ -162,3 +164,118 @@ This functionality was originally proposed as a [pull request to `image_picker_m
 <img src="https://github.com/CompileKernel/native-image-picker-macos/blob/main/readme_assets/phpicker-window.png?raw=true" alt="PHPicker window" width="600">
 
 [Ask a question about using the package](https://github.com/CompileKernel/native-image-picker-macos/discussions/new?category=q-a).
+
+## 🧪 Testing
+
+> [!TIP]
+> With this approach, you can effectively test this platform implementation with the existing packages that use `image_picker` APIs. All platform-specific calls to `NativeImagePickerMacOS` should use the instance from `ImagePickerPlatform.interface` instead of creating a new `NativeImagePickerMacOS` to work.
+
+To override the methods implementation for unit testing, add the dev dependencies:
+
+1. [`mockito`](https://pub.dev/packages/mockito) (or [`mocktail`](https://pub.dev/packages/mocktail)): for mocking the instance methods of `NativeImagePickerMacOS`.
+2. [`image_picker_platform_interface`](https://pub.dev/packages/image_picker_platform_interface): for overriding the instance of `ImagePickerPlatform` with the mock instance.
+3. [`build_runner`](https://pub.dev/packages/build_runner): for creating the generated Dart files.
+4. [`plugin_platform_interface`](https://pub.dev/packages/plugin_platform_interface): Since `ImagePickerPlatform` extends `PlatformInterface`, it's required to apply the mixin `MockPlatformInterfaceMixin` to the mock of `NativeImagePickerMacOS` to [ignore an assertation failure that enforces the usage of `extends` instead of `implements`](https://pub.dev/packages/plugin_platform_interface), since mock classes need to extend `Mock` and implement the real class.
+
+```shell
+$ flutter pub add dev:mockito dev:image_picker_platform_interface dev:build_runner dev:plugin_platform_interface # Add them as dev-dependencies
+```
+
+In your test file, add this annotation somewhere:
+
+```dart
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:native_image_picker_macos/native_image_picker_macos.dart';
+
+@GenerateNiceMocks([MockSpec<NativeImagePickerMacOS>()])
+```
+
+Generate the `MockNativeImagePickerMacOS` by running:
+
+```shell
+$ dart run build_runner build --delete-conflicting-outputs
+```
+
+Create a new instance of `MockNativeImagePickerMacOS` and override the instance of `ImagePickerPlatform` to every test:
+
+```dart
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late MockNativeImagePickerMacOS mockNativeImagePickerMacOS;
+
+  setUp(() {
+    mockNativeImagePickerMacOS = MockNativeImagePickerMacOS();
+
+    ImagePickerPlatform.instance = mockNativeImagePickerMacOS;
+  });
+
+  // Your tests, example:
+
+  testWidgets(
+    'pressing the open photos button calls openPhotosApp from $NativeImagePickerMacOS',
+    (WidgetTester tester) async {
+      await tester
+          .pumpWidget(const ExampleWidget()); // REPLACE WITH THE TARGET WIDGET
+
+      final openPhotosFinder =
+          find.text('Open Photos App'); // REPLACE WITH THE BUTTON TEXT
+
+      expect(openPhotosFinder, findsOneWidget);
+
+      // Assuming the openPhotosApp call will success.
+      when(mockNativeImagePickerMacOS.openPhotosApp())
+          .thenAnswer((_) async => true);
+
+      await tester.tap(openPhotosFinder);
+      await tester.pump();
+
+      verify(mockNativeImagePickerMacOS.openPhotosApp()).called(1);
+      verifyNoMoreInteractions(mockNativeImagePickerMacOS);
+    },
+  );
+
+  // ...
+}
+```
+
+However, if you run the tests, you will get the following error:
+
+```console
+ Assertion failed: "Platform interfaces must not be implemented with `implements`"
+```
+
+And that is because  by default, all plugin platform interfaces that inherit from `PlatformInterface` must `extends` and not `implements` it to avoid breaking changes (adding new methods to platform interfaces are not considered breaking changes).
+
+And mock classes must `implements` the real class rather than `extends` them, a solution is to [provide the mixin `MockPlatformInterfaceMixin` from `plugin_platform_interface` that will override this check](https://pub.dev/packages/plugin_platform_interface#mocking-or-faking-platform-interfaces):
+
+```dart
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+// This doesn't work yet since MockNativeImagePickerMacOS is generated, unlike the mocktail package.
+class MockNativeImagePickerMacOS extends Mock
+    with MockPlatformInterfaceMixin
+    implements NativeImagePickerMacOS {}
+```
+
+And since `MockNativeImagePickerMacOS` is generated, we need a new class that extends the base mock and provides the `MockPlatformInterfaceMixin` for `plugin_platform_interface` to not throw the assertion failure:
+
+```dart
+@GenerateNiceMocks([MockSpec<NativeImagePickerMacOS>(as: Symbol('BaseMockNativeImagePickerMacOS'))]) // This name should be different than MockNativeImagePickerMacOS for the mockito generation to success
+import '<current-test-file-name>.mocks.dart'; // REPLACE <current-test-file-name> with the current test file name without extension
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+class MockNativeImagePickerMacOS extends BaseMockNativeImagePickerMacOS
+    with MockPlatformInterfaceMixin {}
+
+// Use MockNativeImagePickerMacOS instead of BaseMockNativeImagePickerMacOS for creating the mock of NativeImagePickerMacOS
+```
+
+Refer to the [example main_test.dart](example/test/main_test.dart) for the full example test.
+
+> [!NOTE]
+> Refer to the [Flutter documentation on mocking dependencies using Mockito](https://docs.flutter.dev/cookbook/testing/unit/mocking) for more details.

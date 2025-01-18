@@ -881,6 +881,45 @@ void main() {
         },
       );
     });
+
+    group('instanceOrNull', () {
+      test(
+        'returns null if the current instance is not $NativeImagePickerMacOS',
+        () {
+          ImagePickerPlatform.instance = _FakeImagePicker();
+          expect(NativeImagePickerMacOS.instanceOrNull, isNull);
+        },
+      );
+
+      test(
+        'returns $NativeImagePickerMacOS if the current instance is $NativeImagePickerMacOS',
+        () {
+          ImagePickerPlatform.instance = NativeImagePickerMacOS();
+          expect(NativeImagePickerMacOS.instanceOrNull, isNotNull);
+        },
+      );
+    });
+
+    group('instanceOrThrow', () {
+      test(
+        'throws $StateError if the current instance is not $NativeImagePickerMacOS',
+        () {
+          ImagePickerPlatform.instance = _FakeImagePicker();
+          expect(
+            () => NativeImagePickerMacOS.instanceOrThrow,
+            throwsStateError,
+          );
+        },
+      );
+
+      test(
+        'returns $NativeImagePickerMacOS if the current instance is $NativeImagePickerMacOS',
+        () {
+          ImagePickerPlatform.instance = NativeImagePickerMacOS();
+          expect(NativeImagePickerMacOS.instanceOrThrow, isNotNull);
+        },
+      );
+    });
   });
 }
 
