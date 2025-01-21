@@ -66,6 +66,7 @@ enum ImagePickerError {
   phpickerUnsupported,
 
   /// Could not show the picker due to the missing window.
+  /// This May occur if the `NSView` is `nil`, for instance in a headless environment.
   windowNotFound,
 
   /// When a `PHPickerResult` can't load `NSImage`. This error should not be reached
