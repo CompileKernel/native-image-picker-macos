@@ -154,9 +154,6 @@ Contributions are welcome. File issues to the [GitHub repo](https://github.com/C
 * [Similarly to `image_picker_macos`](https://pub.dev/packages/image_picker_macos#limitations), `ImageSource.camera` is not supported [unless a `cameraDelegate` is set](https://pub.dev/packages/image_picker#windows-macos-and-linux).
 * [Similarly to `image_picker_macos`](https://pub.dev/packages/image_picker_macos#pickvideo), the `maxDuration` argument in `pickVideo` is unsupported and will be silently ignored.
 
-> [!WARNING]
-> **Known issue**: The native picker window initially appears smaller than expected, requiring the user to manually resize it. Refer to [#2](https://github.com/CompileKernel/native-image-picker-macos/issues/2) for details.
-
 ## 📚 Additional information
 
 This functionality was originally proposed as a [pull request to `image_picker_macos`](https://github.com/flutter/packages/pull/8079/), but it was later decided to split it into a community package which is unendorsed.
