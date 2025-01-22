@@ -323,10 +323,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
+      sha256: fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.3.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -527,9 +527,10 @@ packages:
   native_image_picker_macos:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: native_image_picker_macos
+      sha256: b66eed636175575fdf09c8fcb8ff109878f3e2f97dce42bf4abc527746737155
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1"
   package_config:
     dependency: transitive
@@ -732,10 +733,10 @@ packages:
     dependency: transitive
     description:
       name: video_player_avfoundation
-      sha256: "61c54fb08fee52861d819a9b3b8e30b92456dad43a875434c677c892eb7772de"
+      sha256: "8a4e73a3faf2b13512978a43cf1cdda66feeeb900a0527f1fbfd7b19cf3458d3"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.6"
+    version: "2.6.7"
   video_player_platform_interface:
     dependency: transitive
     description:
