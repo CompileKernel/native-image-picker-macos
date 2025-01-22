@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import native_image_picker_macos
 
 final class ImageResizeTests: XCTestCase {
