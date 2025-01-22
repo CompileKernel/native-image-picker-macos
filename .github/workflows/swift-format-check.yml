@@ -6,10 +6,16 @@ on:
     branches: [main]
     paths:
       - macos/native_image_picker_macos/**/*.swift
+      - example/macos/Runner/**/*.swift
+      - example/macos/RunnerTests/**/*.swift
+      - example/macos/RunnerUITests/**/*.swift
       - .github/workflows/swift-format-check.yml
   pull_request:
     paths:
       - macos/native_image_picker_macos/**/*.swift
+      - example/macos/Runner/**/*.swift
+      - example/macos/RunnerTests/**/*.swift
+      - example/macos/RunnerUITests/**/*.swift
       - .github/workflows/swift-format-check.yml
 
 jobs:
@@ -41,7 +47,7 @@ jobs:
         run: swift-format dump-configuration
 
       - name: 🔎 Validate Swift Code Formatting
-        run: swift-format lint -r macos/native_image_picker_macos/Sources/native_image_picker_macos --strict
+        run: swift-format lint --strict -r macos/native_image_picker_macos/Sources/native_image_picker_macos example/macos/Runner example/macos/RunnerTests example/macos/RunnerUITests
 
         # SwiftLint: https://github.com/realm/SwiftLint
     #   - name: 🎨 Verify Swift Code Style with SwiftLint
