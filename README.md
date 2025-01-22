@@ -134,6 +134,9 @@ This package uses [pigeon](https://pub.dev/packages/pigeon) for platform communi
 $ dart run pigeon --input pigeons/messages.dart # To generate the required Dart and host-language code.
 $ dart run build_runner build --delete-conflicting-outputs # To generate the mock classes.
 $ swift-format format --in-place --recursive macos/native_image_picker_macos/Sources/native_image_picker_macos example/macos/Runner example/macos/RunnerTests example/macos/RunnerUITests # To format the Swift code.
+$ dart format . # To format the Dart code.
+$ (cd example/macos && xcodebuild test -workspace Runner.xcworkspace -scheme Runner -configuration Debug -quiet) # To run the native macOS unit tests.
+$ flutter test # To run the Flutter unit tests.
 ```
 
 ### Resources

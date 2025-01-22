@@ -36,6 +36,7 @@ jobs:
         run: |
           echo "The code coverage percentage is ${{ steps.coverage-extractor.outputs.COVERAGE }}"
 
+      # TODO(EchoEllet): Collect Swift coverage too, https://github.com/CompileKernel/native-image-picker-macos/issues/6
       # For a detailed guide, refer to: https://bitspittle.dev/blog/2022/kover-badge
       - name: Update dynamic badge gist
         uses: schneegans/dynamic-badges-action@v1.7.0
