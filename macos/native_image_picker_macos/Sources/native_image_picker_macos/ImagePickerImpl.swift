@@ -128,6 +128,9 @@ class ImagePickerImpl: NSObject, ImagePickerApi {
     picker.view.frame = NSRect(x: 0, y: 0, width: pickerWidth, height: pickerHeight)
 
     window.contentViewController?.presentAsSheet(picker)
+
+    // A similar minimum sheet size to PhotosPicker in a macOS SwiftUI app.
+    picker.view.window?.contentMinSize = NSSize(width: 320, height: 200)
   }
 
   func openPhotosApp() -> Bool {
