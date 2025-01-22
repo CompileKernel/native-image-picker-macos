@@ -8,6 +8,12 @@ import PhotosUI
 /// to use [PHPickerViewController](https://developer.apple.com/documentation/photokit/phpickerviewcontroller) which is supported on macOS 13.0+
 /// otherwise fallback to file selector if unsupported or the user prefers the file selector implementation.
 class ImagePickerImpl: NSObject, ImagePickerApi {
+  private let view: NSView?
+
+  init(view: NSView?) {
+    self.view = view
+  }
+
   /// Returns `true` if the current macOS version supports this feature.
   ///
   /// `PHPicker` is supported on macOS 13.0+.
@@ -107,12 +113,18 @@ class ImagePickerImpl: NSObject, ImagePickerApi {
   @available(macOS 13, *)
   private func showPHPicker(_ picker: PHPickerViewController, noActiveWindow: @escaping () -> Void)
   {
-    guard let window = NSApplication.shared.keyWindow else {
+    guard let window = view?.window else {
       noActiveWindow()
       return
     }
-    // TODO(EchoEllet): IMPORTANT The window size of the picker is smaller than expected, see the video in https://discord.com/channels/608014603317936148/1295165633931120642/1295470850283147335
+
+    // A similar initial sheet size to PhotosPicker in a macOS SwiftUI app.
+    picker.view.frame = NSRect(x: 0, y: 0, width: 780, height: 615)
+
     window.contentViewController?.presentAsSheet(picker)
+
+    // A similar minimum sheet size to PhotosPicker in a macOS SwiftUI app.
+    picker.view.window?.contentMinSize = NSSize(width: 320, height: 200)
   }
 
   func openPhotosApp() -> Bool {
