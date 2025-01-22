@@ -9,12 +9,13 @@ jobs:
     name: Publish to pub.dev
     permissions:
       id-token: write # Required for authentication using OIDC to publish to pub.dev
-      contents: write # Required for creating a GitHub release and uploading the LICENSE file
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
   github-release:
     name: Create GitHub Release
     needs: publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for creating a GitHub release and uploading the LICENSE file
     steps:
 
       - name: 📥 Checkout Repository
