@@ -8,13 +8,13 @@ issue_tracker: https://github.com/CompileKernel/native-image-picker-macos/issues
 topics: [image-picker, files, file-selection]
 
 environment:
-  sdk: ^3.0.0
-  flutter: ">=3.0.0"
+  sdk: ^3.3.0
+  flutter: ">=3.19.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  image_picker_platform_interface: ^2.8.0
+  image_picker_platform_interface: ^2.10.0
   meta: ^1.7.0
 
 dev_dependencies:
