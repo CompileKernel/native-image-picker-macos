@@ -1,0 +1,22 @@
+ci:
+  - changed-files:
+    - any-glob-to-all-files:
+      - .github/**
+
+documentation:
+  - changed-files:
+    - any-glob-to-all-files:
+      - CONTRIBUTING.md
+      - CHANGELOG.md
+      - README.md
+
+example:
+  - changed-files:
+      - any-glob-to-all-files: example/**
+
+test:
+  - changed-files:
+      - any-glob-to-all-files:
+          - test/**
+          - example/macos/RunnerTests/**/*.swift
+          - example/macos/RunnerUITests/**/*.swift

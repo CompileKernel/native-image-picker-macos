@@ -1,0 +1,69 @@
+name: Run tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  dart-unit-tests:
+    name: Dart unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      
+      - name: Install package dependencies
+        run: flutter pub get
+        
+      - name: Run tests
+        run: flutter test
+
+  native-macos-unit-tests:
+    name: Native macOS unit tests
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter (stable)
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      # To skip installing CocoaPods, ruby and avoid any build failures or compatibility issues.
+      - name: Enable Flutter Swift Package Manager
+        run: flutter config --enable-swift-package-manager
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: example
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      # macOS 14+ requires UI access to open the app for running tests. To work around this, disable macOS sandboxing.
+      # For more details, see: https://github.com/flutter/packages/pull/6866
+      - name: Disable macOS sandboxing
+        run: |
+          # Replace <true/> with <false/> for DebugProfile.entitlements
+          /usr/libexec/PlistBuddy -c "Set :com.apple.security.app-sandbox bool false" DebugProfile.entitlements
+
+          # Replace <true/> with <false/> for Release.entitlements
+          /usr/libexec/PlistBuddy -c "Set :com.apple.security.app-sandbox bool false" Release.entitlements
+        working-directory: example/macos/Runner
+
+      # Native macOS tests are in the example app: https://docs.flutter.dev/testing/testing-plugins#native-unit-tests
+      - name: Run tests
+        run: xcodebuild test -workspace Runner.xcworkspace -scheme Runner -configuration Debug -quiet
+        working-directory: example/macos

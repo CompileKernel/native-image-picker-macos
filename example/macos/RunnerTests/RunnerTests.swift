@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import native_image_picker_macos
 
 // TODO(EchoEllet): Lacks native UI tests, https://discord.com/channels/608014603317936148/1300517990957056080/1300518056690188361
@@ -9,7 +10,7 @@ import XCTest
 final class RunnerTests: XCTestCase {
 
   func testSupportsPHPicker() {
-    let imagePicker = ImagePickerImpl()
+    let imagePicker = ImagePickerImpl(view: nil)
     if #available(macOS 13.0, *) {
       XCTAssertTrue(
         imagePicker.supportsPHPicker(),
