@@ -118,14 +118,8 @@ class ImagePickerImpl: NSObject, ImagePickerApi {
       return
     }
 
-    let windowSize = window.frame.size
-
-    let scaleFactor = 0.80  // 80% of the parent window's size
-
-    var pickerWidth = windowSize.width * scaleFactor
-    var pickerHeight = windowSize.height * scaleFactor
-
-    picker.view.frame = NSRect(x: 0, y: 0, width: pickerWidth, height: pickerHeight)
+    // A similar initial sheet size to PhotosPicker in a macOS SwiftUI app.
+    picker.view.frame = NSRect(x: 0, y: 0, width: 780, height: 615)
 
     window.contentViewController?.presentAsSheet(picker)
 
