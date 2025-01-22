@@ -33,12 +33,27 @@ jobs:
       - name: 🛠️ Setup Swift
         uses: swift-actions/setup-swift@v2
 
+      - name: Cache Swift Format
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/swift-format
+          key: swift-format-${{ runner.os }}-${{ env.SWIFT_FORMAT_VERSION }}
+
       - name: 📦 Install Swift Format
         run: |
-          git clone --branch $SWIFT_FORMAT_VERSION --depth 1 https://github.com/swiftlang/swift-format.git
-          cd swift-format
-          swift build -c release
-          sudo mv .build/release/swift-format /usr/local/bin/
+          if [ -f ~/.cache/swift-format ]; then
+            echo "Using the cached Swift Format."
+            sudo cp -f ~/.cache/swift-format /usr/local/bin/swift-format
+          else
+            echo "Swift Format is not cached, building and installing..."
+            git clone --branch $SWIFT_FORMAT_VERSION --depth 1 https://github.com/swiftlang/swift-format.git
+            cd swift-format
+            swift build --disable-sandbox -c release
+            sudo cp -f .build/release/swift-format /usr/local/bin/
+
+            echo "Caching the built swift-format"
+            cp -f .build/release/swift-format ~/.cache/swift-format
+          fi
           
       - name: 🔍 Verify Swift Format installation
         run: swift-format --version
