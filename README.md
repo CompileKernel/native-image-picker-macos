@@ -5,6 +5,7 @@
 <a href="https://github.com/CompileKernel/native-image-picker-macos"><img src="https://img.shields.io/github/stars/CompileKernel/native-image-picker-macos" alt="Star on Github"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 <a href="https://github.com/CompileKernel/native-image-picker-macos/actions"><img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/EchoEllet/e115a2922ddd4f9f897b6e2c15d6c071/raw/native-image-picker-macos-coverage-badge.json" alt="Dart Code Coverage"></a>
+<a href="https://github.com/CompileKernel/native-image-picker-macos/actions/workflows/tests.yml"><img src="https://github.com/CompileKernel/native-image-picker-macos/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
 </p>
 
 A macOS platform implementation of [`image_picker`](https://pub.dev/packages/image_picker)
