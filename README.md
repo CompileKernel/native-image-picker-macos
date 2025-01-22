@@ -87,8 +87,7 @@ final bool isRegistered = ImagePickerPlatform.instance is NativeImagePickerMacOS
 **To checks if the current macOS version supports this implementation**:
 
 ```dart
-<!-- TODO: Make this instance method? -->
-final bool isSupported = await NativeImagePickerMacOS().isSupported(); // Returns false on non-macOS platforms or if PHPicker is not supported on the current macOS version.
+final bool isSupported = await NativeImagePickerMacOS.isSupported(); // Returns false on non-macOS platforms or if PHPicker is not supported on the current macOS version.
 ```
 
 **To switch between `image_picker_macos` and `native_image_picker_macos` implementations**:

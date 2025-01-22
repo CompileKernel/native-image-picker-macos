@@ -57,14 +57,12 @@ class NativeImagePickerMacOS extends CameraDelegatingImagePickerPlatform {
   static bool isRegistered() =>
       ImagePickerPlatform.instance is NativeImagePickerMacOS;
 
-  // TODO(EchoEllet): Might rename those APIs, change them, or make them non-static (registerWithIfSupported, isSupported, isRegistered).
   /// Returns whether the this implementation is supported on the current
   /// target platform.
   ///
   /// This implementation is supported on macOS 13 Ventura and higher.
   static Future<bool> isSupported() async {
     if (defaultTargetPlatform == TargetPlatform.macOS && !kIsWeb) {
-      // TODO(EchoEllet): Duplicated (_hostApi.supportsPHPicker()) in supportsPHPicker
       if (await _hostApi.supportsPHPicker()) {
         return true;
       }
