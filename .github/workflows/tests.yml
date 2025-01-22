@@ -39,6 +39,10 @@ jobs:
           channel: stable
           cache: true
 
+      # To skip installing CocoaPods, ruby and avoid any build failures or compatibility issues.
+      - name: Enable Flutter Swift Package Manager
+        run: flutter config --enable-swift-package-manager
+
       - name: Install dependencies
         run: flutter pub get
         working-directory: example
