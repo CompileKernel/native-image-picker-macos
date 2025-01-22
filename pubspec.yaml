@@ -1,6 +1,6 @@
 name: native_image_picker_macos
 description: "A macOS platform implementation of image_picker using the native system picker instead of file_selector"
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/CompileKernel/native-image-picker-macos
 documentation: https://github.com/CompileKernel/native-image-picker-macos
 homepage: https://github.com/CompileKernel/native-image-picker-macos
