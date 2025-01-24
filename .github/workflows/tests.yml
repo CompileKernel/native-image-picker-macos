@@ -10,6 +10,7 @@ jobs:
   dart-unit-tests:
     name: Dart unit tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -29,6 +30,7 @@ jobs:
   native-macos-unit-tests:
     name: Native macOS unit tests
     runs-on: macos-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
