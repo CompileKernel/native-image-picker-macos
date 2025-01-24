@@ -18,5 +18,20 @@ test:
   - changed-files:
       - any-glob-to-all-files:
           - test/**
-          - example/macos/RunnerTests/**/*.swift
-          - example/macos/RunnerUITests/**/*.swift
+          - example/integration_test/**
+          - example/macos/RunnerTests/**
+          - example/macos/RunnerUITests/**
+          - example/test/**
+
+dart:
+  - changed-files:
+      - any-glob-to-all-files:
+          - lib/**/*.dart
+          - test/**/*.dart
+          - example/**/*.dart
+
+swift:
+  - changed-files:
+      - any-glob-to-all-files:
+          - macos/**/*.swift
+          - example/macos/**/*.swift
