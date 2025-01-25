@@ -168,7 +168,7 @@ This functionality was originally proposed as a [pull request to `image_picker_m
 ## 🧪 Testing
 
 > [!TIP]
-> With this approach, you can effectively test this platform implementation with the existing packages that use `image_picker` APIs. All platform-specific calls to `NativeImagePickerMacOS` should use the instance from `ImagePickerPlatform.interface` instead of creating a new `NativeImagePickerMacOS` to work.
+> With this approach, you can effectively test this platform implementation with the existing packages that use `image_picker` APIs. All platform-specific calls to `NativeImagePickerMacOS` should use the instance from `ImagePickerPlatform.instance` instead of creating a new `NativeImagePickerMacOS` to work.
 
 To override the methods implementation for unit testing, add the dev dependencies:
 
