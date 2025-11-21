@@ -19,7 +19,7 @@ jobs:
     steps:
 
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🏷️ Extract version from tag as pubspec.yaml version
         id: extract_version
