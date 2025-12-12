@@ -34,7 +34,7 @@ jobs:
         uses: swift-actions/setup-swift@v2
 
       - name: Cache Swift Format
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/swift-format
           key: swift-format-${{ runner.os }}-${{ env.SWIFT_FORMAT_VERSION }}-${{ hashFiles('**/Package.resolved') }}
